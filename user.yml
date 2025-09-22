@@ -1,0 +1,18 @@
+# Playbook для управления пользователем
+---
+# имя playbook
+- name: user
+# список хостов на которых будет выполняться playbook команда
+  hosts: demo
+  # список заданий которые будут выполняться в рамках playbook
+  tasks:
+    # имя задачи
+    - name: Create user
+      # модуль user
+      user:
+      # параметры модуля user как в adhok
+        # имя пользователя
+        name: jin388
+        # состояние пользователя
+        state: present
+

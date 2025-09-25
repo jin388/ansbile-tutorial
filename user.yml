@@ -1,18 +1,36 @@
-# Playbook для управления пользователем
 ---
-# имя playbook
 - name: user
-# список хостов на которых будет выполняться playbook команда
   hosts: demo
-  # список заданий которые будут выполняться в рамках playbook
   tasks:
-    # имя задачи
-    - name: Create user
-      # модуль user
-      user:
-      # параметры модуля user как в adhok
-        # имя пользователя
-        name: jin388
-        # состояние пользователя
-        state: present
-
+    - name: Preconfig block
+      block:
+        - name: Sleep
+          # Unix-команда спать 15 сек для примера
+          command: /bin/sleep 15
+          # асинхронная задача будет выполняться 1000 сек
+          async: 1000
+          # проверять результат каждые 5 сек
+          # poll: 5
+          poll: 0
+          # регистрируем результат для job id
+          register: sleep_status
+        # вывод результата job, для наглядности
+        - debug:
+            var: sleep_status
+        # другая асинхронная задача будет выполняться последовательно после первой
+        - name: Echo
+          command: echo "Hello world"
+      become: true
+      # Здесь асинхронная задача будет выполняться параллельно с другими задачами
+    - name: Check sleep status
+      async_status:
+        # job id
+        jid: "{{ sleep_status.ansible_job_id }}"
+      # регистрируем статус job
+      register: job_result
+      # ждать пока асинхронная задача завершится
+      until: job_result.finished
+      # здесь количество попыток и пауза между попытками
+      retries: 100
+      delay: 1
+      become: true

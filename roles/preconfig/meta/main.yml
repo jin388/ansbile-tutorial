@@ -1,0 +1,28 @@
+# Минимальная необходимая информация о роли
+galaxy_info:
+  role_name: preconfig
+  description: Настройка серверов для работы c Docker
+  author: jin388
+  license: MIT
+  min_ansible_version: "2.9"
+  platforms: 
+    - name: Ubuntu
+      version: 
+        - all 
+dependencies:
+  - role: deploy
+
+# !старый формат
+# argument_specs:
+#   main:
+#     description: Настройка серверов для работы c Docker
+#     author: jin388
+#     license: MIT
+#     min_ansible_version: 2.9
+#     platform: Ubuntu
+# # Здесь несмотря на последовательность исполнения ролей в all.yml preconfig-->deploy-->deploy, все роли выполняются последовательно,
+# # deploy будет выполнятся первым. Определяет порядок выполнения ролей
+# dependencies:
+#   - role: deploy
+# # Разрешить дублирующиеся роли, т.е. можно выполнять одну и ту же роль дважды
+# # allow_duplicates: true

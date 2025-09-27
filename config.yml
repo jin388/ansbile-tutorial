@@ -2,6 +2,7 @@
 - name: Preconfig
   hosts: cluster
   tasks:
+  # теперь находится в папке roles/preconfig/tasks/main.yml
     - name: Install Docker
       block:
         - name: Add universe

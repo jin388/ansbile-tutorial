@@ -1,11 +1,108 @@
+# ! Lookup
 ---
 - name: Deploy task
-  ansible.builtin.command: "echo {{ test_var }}"
-  register: result
-  # Выполняется по условию. Если равно 0, то условие выполнено
-  changed_when: "'0' in result.stdout"
-  # или
-  # changed_when: "'0' not in result.stdout"
+  vars:
+    name: a
+  debug:
+  # здесь найдем file и положим результат в файл '../meta/main.yml'
+  # при ошибке выведем предупреждение
+    # msg: "{{ lookup('file', '../meta/main.yml'), error='warn' }}"
+  # здесь найдем среди всех переменных нужную нам переменную 
+    msg: "{{ lookup('vars', 'name') }}"
 
-- debug:
-    var: result
+# ! Тэги
+# ---
+# - name: Deploy task
+#   ansible.builtin.command: "echo {{ test_var }}"
+#   register: result
+#   # Выполняется по условию. Если равно 0, то условие выполнено
+#   changed_when: "'0' in result.stdout"
+#   # или
+#   # changed_when: "'0' not in result.stdout"
+
+# - debug:
+#     var: result
+
+# ! Циклы
+# ---
+# - name: Loop task
+#   # Итерация по большим объектам
+#   include_tasks: inner.yml
+#   debug:
+#     msg: "{{ item.name }} - {{ my_index }} - {{ ansible_loop.allitems }} - {{ outer_item }}"
+#   # позволяет во время выполнения подключить другие playbooks
+#   # здесь для демонстрации вложенных циклов
+#   # к каждому элементу цикла(ниже) подключается inner.yml(путь к файлу)
+#   loop: 
+#     - name: Jack
+#       age: 32
+#       group: admin
+#       roles:
+#         admin: true
+#         user: false
+#         manager: true
+#     - name: Jill
+#       age: 24
+#       group: admin
+#       roles:
+#         admin: true
+#         user: false
+#         manager: true
+#     - name: John
+#       age: 32
+#       group: admin
+#       roles:
+#         admin: true
+#         user: false
+#         manager: true
+#   loop_control:
+#     # параметры цикла
+#     # выгрузка только item.name
+#     label: "{{ item.name }}"
+#     # пауза между итерациями
+#     pause: 3
+#     # индекс итерации
+#     index_var: my_index
+#     # можем обращаться к переменной ansible_loop, 
+#     # которая содержит все итерации
+#     extended: true
+#     # переопределить переменную item, помогает при вложенных циклах
+#     loop_var: outer_item
+
+  # Итерация по инвентарю
+  # debug:
+  #   msg: "{{ item }}"
+  # loop: "{{ groups[ 'all' ] }}"
+
+  # output
+#   command: echo "{{ item }}"
+#   loop: 
+#     - a
+#     - b
+#   register: result
+
+# - name: debug
+#   debug:
+#     var: result
+
+  # Итерация по словарю
+  # vars:
+  #   data:
+  #     a: 1
+  #     b: 2
+  # # debug для словарей принципиально здесь
+  # debug:
+  #   msg: "{{ item.key }} is {{ item.value }}"
+  # loop: "{{ data | dict2items }}"
+
+  # Итерация по объекту
+  #   msg: "{{ item.name }} is {{ item.age }}"
+  # loop: 
+  #   - { name: 'Jack', age: 32 }
+  #   - { name: 'Jill', age: 24 }
+
+  # Итерация по списку 
+    # msg: "{{ item }}"
+  # loop:
+  #   - a
+  #   - b

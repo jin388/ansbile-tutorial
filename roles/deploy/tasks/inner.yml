@@ -1,0 +1,8 @@
+---
+- name: Inner task
+  debug:
+    # outer_item из main.yml
+    msg: "1 {{ outer_item }} - 2 {{ item }}"
+  loop:
+    - 1
+    - 2

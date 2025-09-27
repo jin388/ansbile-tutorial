@@ -1,3 +1,11 @@
 ---
-- name: Demo
-  command: echo "DEMO"
+- name: Deploy task
+  ansible.builtin.command: "echo {{ test_var }}"
+  register: result
+  # Выполняется по условию. Если равно 0, то условие выполнено
+  changed_when: "'0' in result.stdout"
+  # или
+  # changed_when: "'0' not in result.stdout"
+
+- debug:
+    var: result

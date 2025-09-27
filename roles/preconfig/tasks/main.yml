@@ -5,6 +5,8 @@
       ansible.builtin.apt_repository:
         repo: "deb http://us.archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe"
         state: present
+      # пример с тэгом
+      tags: universe
 
     - name: Install Docker prerequisites
       ansible.builtin.apt:
